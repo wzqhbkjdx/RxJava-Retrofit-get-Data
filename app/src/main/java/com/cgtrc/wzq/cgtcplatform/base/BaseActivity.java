@@ -6,7 +6,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.cgtrc.wzq.cgtcplatform.App;
 import com.cgtrc.wzq.cgtcplatform.R;
+import com.cgtrc.wzq.cgtcplatform.utils.RealmGetter;
 
 import butterknife.Bind;
 import io.realm.Realm;
@@ -35,7 +37,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void initView() {
         getLayoutId();
         setContentView(layoutId);
-        realm = Realm.getDefaultInstance();
+        realm = RealmGetter.getRealm(App.realmConfiguration);
     }
 
     @Override

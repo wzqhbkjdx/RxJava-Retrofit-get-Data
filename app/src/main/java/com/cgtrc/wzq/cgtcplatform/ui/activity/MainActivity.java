@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.cgtrc.wzq.cgtcplatform.R;
 import com.cgtrc.wzq.cgtcplatform.base.BaseActivity;
+import com.cgtrc.wzq.cgtcplatform.ui.fragment.ContentFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         setupDrawer();
         initNavigationView();
-//        replace(ContentFragment.MENU_NEWS);
+        replace("Home");
     }
 
     @Override
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity {
      * @param type
      */
     private void replace(String type) {
-//        replaceFragment(ContentFragment.newInstance(type),type);
+        replaceFragment(new ContentFragment(),type);
     }
 
     /**

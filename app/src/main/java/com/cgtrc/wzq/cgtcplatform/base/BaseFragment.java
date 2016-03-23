@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.cgtrc.wzq.cgtcplatform.App;
+import com.cgtrc.wzq.cgtcplatform.utils.RealmGetter;
+
 import butterknife.ButterKnife;
 import io.realm.Realm;
 
@@ -43,7 +46,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         return rootView;
     }
 
-    private void checkPresenterIsNull() {
+    protected void checkPresenterIsNull() {
         if(mPresenter == null) {
             throw new IllegalStateException("please init mPresenter in initPresenter() method ");
         }
@@ -56,7 +59,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        realm = Realm.getDefaultInstance();//得到Realm数据库实例
+//        realm = Realm.getDefaultInstance();//得到Realm数据库实例
+        realm = RealmGetter.getRealm(App.realmConfiguration);
+
     }
 
     @Override
@@ -78,9 +83,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
         realm.close();
     }
 
-//    public boolean isLive() {
-//        return getActivity() != null && getActivity().isDestroyed();
-//    }
+    public boolean isLive() {
+        return getActivity() != null && getActivity().isDestroyed();
+    }
 }
 
 

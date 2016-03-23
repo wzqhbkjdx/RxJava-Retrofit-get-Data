@@ -1,29 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="?android:attr/selectableItemBackground"
     android:paddingLeft="12dp"
     android:paddingRight="12dp"
-    android:layout_height="match_parent">
-    <TextView
-        android:id="@+id/story_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="10dp"
-        android:text="今日热闻"
-        android:textSize="13sp"
-        android:visibility="gone" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/story_item"
-        android:layout_height="92dp"
-        android:orientation="horizontal">
+    android:layout_height="90dp">
 
         <ImageView
-            android:id="@+id/story_img"
+            android:id="@+id/news_img"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_alignParentLeft="true"
@@ -33,12 +18,12 @@
             android:src="@drawable/ic_menu_gallery" />
 
         <TextView
-            android:id="@+id/story_title"
+            android:id="@+id/news_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/story_img"
+            android:paddingTop="20dp"
+            android:layout_toRightOf="@id/news_img"
             android:transitionName="@string/share_title"
             android:lineSpacingMultiplier="1.2"
             android:paddingLeft="10dp"
@@ -47,14 +32,33 @@
             android:textSize="16sp"
             tools:ignore="RtlSymmetry"/>
 
+        <TextView
+            android:text="original"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/news_img"
+            android:layout_alignLeft="@+id/item_view"
+            android:layout_alignStart="@+id/item_view"
+            android:id="@+id/news_original" />
+
+        <TextView
+            android:id="@+id/news_pubDate"
+            android:text="pubDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/news_original"
+            android:layout_alignRight="@+id/item_view"
+            android:layout_alignEnd="@+id/item_view" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/story_img"
-            android:background="@color/lighter_gray" />
-    </RelativeLayout>
+            android:layout_toRightOf="@id/news_img"
+            android:background="@color/lighter_gray"
+            android:id="@+id/item_view" />
 
-</FrameLayout>
+
+</RelativeLayout>

@@ -12,4 +12,6 @@ public class NewsDataPresenter extends BasePresenter {
     public NewsDataPresenter(Activity context) {
         super(context);
     }
+
+
 }

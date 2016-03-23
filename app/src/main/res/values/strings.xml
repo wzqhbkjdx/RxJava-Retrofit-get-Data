@@ -13,4 +13,11 @@
     <string name="app">应用</string>
     <string name="nav_share">分享</string>
     <string name="nav_setting">设置</string>
+    <string name="hottest">两机大事</string>
+    <string name="loading">努力加载中</string>
+    <string name="load_fail">网络未连接,请检查您的网络!</string>
+    <string name="news">新闻</string>
+    <string name="store">商城</string>
+    <string name="data">数据</string>
+    <string name="circle">圈子</string>
 </resources>

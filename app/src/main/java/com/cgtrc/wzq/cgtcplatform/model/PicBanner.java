@@ -35,22 +35,22 @@ public class PicBanner extends RealmObject implements Serializable, IPicData {  
         this.description = description;
     }
 
-    @Override
+
     public String getLink() {
         return link;
     }
 
-    @Override
+
     public String getTitle() {
         return title;
     }
 
-    @Override
-    public String getPubdate() {
+
+    public String getPubDate() {
         return pubDate;
     }
 
-    @Override
+
     public String getDescription() {
         return description;
     }

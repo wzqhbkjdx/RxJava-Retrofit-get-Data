@@ -17,36 +17,28 @@ public class RSSItem extends RealmObject implements Serializable,INewsData {
     private String title;
     private String description;
     private String link;
-    private String pubdate;
+    private String pubDate;
     private String type;
+    private String original;
+    private String picLink;
 
-    @Override
+
     public String getTitle() {
         return title;
     }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
 
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @Override
     public String getLink() {
         return link;
     }
@@ -55,35 +47,35 @@ public class RSSItem extends RealmObject implements Serializable,INewsData {
         this.link = link;
     }
 
-    @Override
-    public String getPubdate() {
-        return pubdate;
-    }
-    public void setPubdate(String pubdate) {
-        this.pubdate = pubdate;
+    public String getPubDate() {
+        return pubDate;
     }
 
-    @Override
-    public String toString(){
-        return "RSSItem [title=" + title + ", link=" + link + ", pubdate=" + pubdate +
-                ", description" + description + "]";
+    public void setPubDate(String pubDate) {
+        this.pubDate = pubDate;
     }
 
-    @Override
-    public boolean isHeader() { //这个数据结构服务器那边也需要同步更改,从而才能适配
-        if(type.equals(DataCategory.图片新闻)) {
-            return true;
-        } else {
-            return false;
-        }
+    public String getType() {
+        return type;
     }
 
-    @Override
-    public boolean isNormalNews() { //这个数据结构服务器那边也需要同步更改,从而才能适配
-        if(type.equals(DataCategory.行业动态) || type.equals(DataCategory.行业新闻) || type.equals(DataCategory.长知识)) {
-            return true;
-        } else {
-            return false;
-        }
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getOriginal() {
+        return original;
+    }
+
+    public void setOriginal(String original) {
+        this.original = original;
+    }
+
+    public String getPicLink() {
+        return picLink;
+    }
+
+    public void setPicLink(String picLink) {
+        this.picLink = picLink;
     }
 }

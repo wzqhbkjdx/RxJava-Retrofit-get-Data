@@ -1,10 +1,9 @@
 package com.cgtrc.wzq.cgtcplatform.base;
 
-import android.support.annotation.CheckResult;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 
 import com.cgtrc.wzq.cgtcplatform.R;
-import com.cgtrc.wzq.cgtcplatform.inerf.ISwipeRefreshView;
 
 import butterknife.Bind;
 
@@ -12,10 +11,16 @@ import butterknife.Bind;
  * Created by bym on 16/3/15.
  */
 public abstract class BaseSwipeRefreshFragment<P extends BasePresenter>
-        extends BaseFragment<P> implements ISwipeRefreshView {
+        extends BaseFragment<P> implements SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.swipe_refresh)
     protected SwipeRefreshLayout swipeRefreshLayout;
+    @Bind(R.id.list)
+    protected RecyclerView recyclerView;
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
 
     @Override
     protected void initViews() {
@@ -24,53 +29,22 @@ public abstract class BaseSwipeRefreshFragment<P extends BasePresenter>
 
     private void initSwipeLayout() {
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorAccent);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if(prepareRefresh()){
-                    onRefreshStarted();
-                } else {
-                    hideRefresh();
+        swipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+
+
+    public void changeProgress(final boolean refreshState) {
+        if(null != swipeRefreshLayout) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(refreshState);
                 }
-            }
-        });
+            });
+        }
     }
 
-    @Override
-    public void hideRefresh() {
-        swipeRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(swipeRefreshLayout != null) {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        },1000);
-    }
 
-    /**
-     * check data status
-     * @return return true indicate it should load data really else indicate don't refresh
-     */
-    protected boolean prepareRefresh() {
-        return true;
-    }
-
-    @Override
-    public void showRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-    }
-
-    @CheckResult
-    public boolean isRefreshing() {
-        return swipeRefreshLayout.isRefreshing();
-    }
-
-    @Override
-    public void getDataFinish() {
-        hideRefresh();
-    }
-
-    protected abstract void onRefreshStarted();
 
 }

@@ -14,6 +14,7 @@ import io.realm.RealmConfiguration;
 public class App extends Application {
 //    预留的位置内存泄露监测 private RefWatcher refWatcher;
     public static Context context;
+    public static RealmConfiguration realmConfiguration;
 
     @Override
     public void onCreate() {
@@ -35,7 +36,7 @@ public class App extends Application {
      * 配置数据库
      */
     private void setupRealm() {
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(this).build();
+        realmConfiguration = new RealmConfiguration.Builder(this).build();
         Realm.setDefaultConfiguration(realmConfiguration);
     }
 

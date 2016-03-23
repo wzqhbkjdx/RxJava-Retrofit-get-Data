@@ -4,13 +4,17 @@ import android.content.Context;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cgtrc.wzq.cgtcplatform.R;
-import com.cgtrc.wzq.cgtcplatform.inerf.INewsData;
+import com.cgtrc.wzq.cgtcplatform.model.RSSItem;
+import com.cgtrc.wzq.cgtcplatform.utils.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,30 +24,33 @@ import java.util.List;
  */
 public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static int TYPE_BANNER = 0;
-    /**
-     * header是用于表示日期的标题
-     */
-    private static final int TYPE_HEADER = 1;
-    private static final int TYPE_ITEM = 2;
+    private static final int TYPE_ITEM = 1;
     /**
      * footer是"加载更多"的提示
      */
-    private static final int TYPE_FOOTER = 3;
+    private static final int TYPE_FOOTER = 2;
 
-    private List<INewsData> mList;
     private final Context context;
     private static IClickMainItemListener mIClickMainItemListener;
     private static ColorFilter mColorFilter;//图片的色彩滤镜
-    private boolean showHeader;
     private boolean hasFooter;
     public static int textGrey;
     public static int textDark;
 
+    private List<RSSItem> newsItems;
+
     public MainListAdapter(Context context) {
         this.context = context;
-        mList = new ArrayList<>();
-        //初始化滤镜
+
+        /**
+         * TODO:List数据为空的时候怎么处理,数据什么时候保存
+         */
+//        newsItems = DB.findAll(RSSItem.class); //数据库如果没有存储数据,直接查找会导致错误
+        newsItems = getDefaultData(); //初始化数据
+        /**
+         * 初始化滤镜
+         * TODO:移动到Banner
+         */
         float[] array = new float[] {
                 1,0,0,0,-70,
                 0,1,0,0,-70,
@@ -53,14 +60,8 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         mColorFilter = new ColorMatrixColorFilter(new ColorMatrix(array));
     }
 
-
-
     public void setIClickItemListener(IClickMainItemListener iClickMainItemListener) {
         this.mIClickMainItemListener = iClickMainItemListener;
-    }
-
-    public void setShowHeader(boolean showHeader) {
-        this.showHeader = showHeader;
     }
 
     public boolean isHasFooter() {
@@ -72,53 +73,98 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void addNewsWithClear(List<INewsData> newsList) {
-        mList.clear();
-        addNews(newsList);
-    }
-
-    public void addNews(List<INewsData> newsList) {
-        for(INewsData item : newsList) {
-            mList.add(item);
+    public void addNews(List<RSSItem> items) {
+        this.newsItems = items;
+        if(items.size() != 0) {
+            setHasFooter(true);
         }
-    }
-
-    public void clear() {
-        showHeader = false;
+        notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.fragment_news_item,parent,false);
-        return null;
+
+      if(viewType == TYPE_FOOTER) {
+            View view = layoutInflater.inflate(R.layout.footer_loading, parent, false);
+            return new FooterViewHolder(view);
+        } else {
+            View view = layoutInflater.inflate(R.layout.fragment_news_item, parent, false);
+            return new ViewHolder(view);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Context context = holder.itemView.getContext();
+        textGrey = ContextCompat.getColor(context,R.color.darker_gray);
+        textDark = ContextCompat.getColor(context, android.support.design.R.color.abc_primary_text_material_light);
 
+        if(holder instanceof ViewHolder) {
+            final ViewHolder viewHolder = (ViewHolder)holder;
+            viewHolder.rssItem = newsItems.get(position);
+
+            viewHolder.mTitle.setText(viewHolder.rssItem.getTitle());
+            viewHolder.mPubDate.setText(viewHolder.rssItem.getPubDate());
+            viewHolder.mOriginal.setText(viewHolder.rssItem.getOriginal());
+
+            if(viewHolder.rssItem.getPicLink() != null) {
+                //用gilde开源库异步加载图片
+                ImageUtil.load(context,viewHolder.rssItem.getPicLink(),viewHolder.mImage);
+            }
+        }
+        return;
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+
+        if (hasFooter) {
+            return newsItems.size() + 1;
+        }
+        return newsItems.size() ;
+
     }
 
     @Override
     public int getItemViewType(int position) {
-        INewsData data = mList.get(position);
-        if(data.isHeader()){
-            return EItemType.ITEM_TYPE_PIC.ordinal();
-        } else {
-            return EItemType.ITEM_TYPE_NORMAL.ordinal();
+
+        if(hasFooter && position == newsItems.size() + 1) {
+            return TYPE_FOOTER;
+        }
+        return TYPE_ITEM;
+    }
+
+    public class FooterViewHolder extends RecyclerView.ViewHolder {
+
+        public FooterViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
-    abstract static class ViewHolderItem extends RecyclerView.ViewHolder {
-        public ViewHolderItem(View itemView) {
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        public final ImageView mImage;
+        public final TextView mTitle;
+        public final TextView mPubDate;
+        public final TextView mOriginal;
+        public final View mItem;
+        public RSSItem rssItem;
+
+        public ViewHolder(View itemView) {
             super(itemView);
+            rssItem = new RSSItem();
+            mImage = (ImageView) itemView.findViewById(R.id.news_img);
+            mTitle = (TextView) itemView.findViewById(R.id.news_title);
+            mPubDate = (TextView) itemView.findViewById(R.id.news_pubDate);
+            mOriginal = (TextView) itemView.findViewById(R.id.news_original);
+            mItem = itemView.findViewById(R.id.item_view);
         }
-        abstract void bindItem(Context context, INewsData data);
+
+        @Override
+        public String toString() {
+            return super.toString() + " '" + mTitle.getText() + "'";
+        }
     }
 
     /**
@@ -127,16 +173,25 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     public interface IClickMainItemListener {
 
-        void onClickGankItemGirl();
+        void onItemClick(RecyclerView.ViewHolder viewHolder);
 
-        void onClickGankItemNormal();
     }
 
-    /**
-     * 新闻类型 枚举
-     */
-    private enum EItemType {
-        ITEM_TYPE_NORMAL,
-        ITEM_TYPE_PIC;
+    private List<RSSItem> getDefaultData() {
+        List<RSSItem> list = new ArrayList<>();
+        RSSItem item = new RSSItem();
+        item.setDescription("两机专项即将在年内成立");
+        item.setLink("www.baidu.com");
+        item.setTitle("两机专项");
+        item.setOriginal("网易新闻");
+        item.setPicLink("");
+        item.setPubDate("2016-03-23");
+        item.setType("行业动态");
+        for(int i = 0; i < 10; i++) {
+            list.add(item);
+        }
+        return list;
     }
+
+
 }
