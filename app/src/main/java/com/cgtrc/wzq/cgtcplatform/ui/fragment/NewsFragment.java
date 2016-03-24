@@ -8,18 +8,16 @@ import com.cgtrc.wzq.cgtcplatform.R;
 import com.cgtrc.wzq.cgtcplatform.adapter.MainListAdapter;
 import com.cgtrc.wzq.cgtcplatform.base.BaseSwipeRefreshFragment;
 import com.cgtrc.wzq.cgtcplatform.inerf.INewsView;
-import com.cgtrc.wzq.cgtcplatform.model.RSSItem;
+import com.cgtrc.wzq.cgtcplatform.model.NewsData;
 import com.cgtrc.wzq.cgtcplatform.presenter.NewsDataPresenter;
 import com.cgtrc.wzq.cgtcplatform.ui.activity.MainActivity;
 import com.cgtrc.wzq.cgtcplatform.utils.UiUtils;
-
-import java.util.List;
 
 /**
  * Created by bym on 16/3/16.
  * TODO:添加网络请求的时候,在该view destory 或者用户点击back键后,应该取消该网络请求
  */
-public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> implements INewsView<RSSItem> {
+public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> implements INewsView<NewsData> {
 
 
     private MainListAdapter adapter;
@@ -28,11 +26,13 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
 
 
 
+
     @Override
     public void onDestroyView() {
         /**
          * TODO:在这里添加网络请求的cancel方法
          */
+        mPresenter.cancelConnection();
         super.onDestroyView();
     }
 
@@ -40,8 +40,6 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
     protected int getLayoutId() {
         return layoutId = R.layout.fragment_recycler ;
     }
-
-
 
     @Override
     protected void initViews() {
@@ -101,7 +99,7 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
     }
 
     @Override
-    public void addNews(List<RSSItem> news) {
+    public void addNews(NewsData news) {
         adapter.addNews(news);
     }
 
@@ -119,7 +117,7 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
 
     @Override
     protected void initPresenter() {
-        mPresenter = new NewsDataPresenter(getActivity());
+//        mPresenter = new NewsDataPresenter(getActivity());z
     }
 
     @Override
@@ -129,4 +127,6 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
          */
 
     }
+
+
 }

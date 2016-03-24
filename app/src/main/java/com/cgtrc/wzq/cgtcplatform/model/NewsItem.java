@@ -1,6 +1,6 @@
 package com.cgtrc.wzq.cgtcplatform.model;
 
-import com.cgtrc.wzq.cgtcplatform.inerf.INewsData;
+import com.cgtrc.wzq.cgtcplatform.inerf.INewsItem;
 
 import java.io.Serializable;
 
@@ -11,7 +11,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by bym on 16/3/15.
  * 代表列表新闻和图片新闻
  */
-public class RSSItem extends RealmObject implements Serializable,INewsData {
+public class NewsItem extends RealmObject implements Serializable,INewsItem {
 
     @PrimaryKey
     private String title;

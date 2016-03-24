@@ -13,7 +13,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cgtrc.wzq.cgtcplatform.R;
-import com.cgtrc.wzq.cgtcplatform.model.RSSItem;
+import com.cgtrc.wzq.cgtcplatform.model.NewsData;
+import com.cgtrc.wzq.cgtcplatform.model.NewsItem;
 import com.cgtrc.wzq.cgtcplatform.utils.ImageUtil;
 
 import java.util.ArrayList;
@@ -37,7 +38,8 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static int textGrey;
     public static int textDark;
 
-    private List<RSSItem> newsItems;
+    private List<NewsItem> newsItems;
+    private NewsData newsData;
 
     public MainListAdapter(Context context) {
         this.context = context;
@@ -45,7 +47,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         /**
          * TODO:List数据为空的时候怎么处理,数据什么时候保存
          */
-//        newsItems = DB.findAll(RSSItem.class); //数据库如果没有存储数据,直接查找会导致错误
+//        newsItems = DB.findAll(NewsItem.class); //数据库如果没有存储数据,直接查找会导致错误
         newsItems = getDefaultData(); //初始化数据
         /**
          * 初始化滤镜
@@ -73,9 +75,10 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         notifyDataSetChanged();
     }
 
-    public void addNews(List<RSSItem> items) {
-        this.newsItems = items;
-        if(items.size() != 0) {
+    public void addNews(NewsData newsData) {
+        this.newsData = newsData;
+        newsItems = newsData.getNewsItems();
+        if(newsItems.size() != 0) {
             setHasFooter(true);
         }
         notifyDataSetChanged();
@@ -102,15 +105,15 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if(holder instanceof ViewHolder) {
             final ViewHolder viewHolder = (ViewHolder)holder;
-            viewHolder.rssItem = newsItems.get(position);
+            viewHolder.newsItem = newsItems.get(position);
 
-            viewHolder.mTitle.setText(viewHolder.rssItem.getTitle());
-            viewHolder.mPubDate.setText(viewHolder.rssItem.getPubDate());
-            viewHolder.mOriginal.setText(viewHolder.rssItem.getOriginal());
+            viewHolder.mTitle.setText(viewHolder.newsItem.getTitle());
+            viewHolder.mPubDate.setText(viewHolder.newsItem.getPubDate());
+            viewHolder.mOriginal.setText(viewHolder.newsItem.getOriginal());
 
-            if(viewHolder.rssItem.getPicLink() != null) {
+            if(viewHolder.newsItem.getPicLink() != null) {
                 //用gilde开源库异步加载图片
-                ImageUtil.load(context,viewHolder.rssItem.getPicLink(),viewHolder.mImage);
+                ImageUtil.load(context,viewHolder.newsItem.getPicLink(),viewHolder.mImage);
             }
         }
         return;
@@ -149,11 +152,11 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public final TextView mPubDate;
         public final TextView mOriginal;
         public final View mItem;
-        public RSSItem rssItem;
+        public NewsItem newsItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            rssItem = new RSSItem();
+            newsItem = new NewsItem();
             mImage = (ImageView) itemView.findViewById(R.id.news_img);
             mTitle = (TextView) itemView.findViewById(R.id.news_title);
             mPubDate = (TextView) itemView.findViewById(R.id.news_pubDate);
@@ -177,9 +180,9 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    private List<RSSItem> getDefaultData() {
-        List<RSSItem> list = new ArrayList<>();
-        RSSItem item = new RSSItem();
+    private List<NewsItem> getDefaultData() {
+        List<NewsItem> list = new ArrayList<>();
+        NewsItem item = new NewsItem();
         item.setDescription("两机专项即将在年内成立");
         item.setLink("www.baidu.com");
         item.setTitle("两机专项");

@@ -1,7 +1,5 @@
 package com.cgtrc.wzq.cgtcplatform.model;
 
-import com.cgtrc.wzq.cgtcplatform.inerf.IPicData;
-
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -11,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by bym on 16/3/17.
  * news item in top banner
  */
-public class PicBanner extends RealmObject implements Serializable, IPicData {  //保存到本地,还是用Serializable
+public class PicBanner extends RealmObject implements Serializable {  //保存到本地,还是用Serializable
 
     @PrimaryKey
     private String title;

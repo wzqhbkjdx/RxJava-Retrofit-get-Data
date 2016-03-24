@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cgtrc.wzq.cgtcplatform.App;
+import com.cgtrc.wzq.cgtcplatform.inerf.IBasePresenter;
 import com.cgtrc.wzq.cgtcplatform.utils.RealmGetter;
 
 import butterknife.ButterKnife;
@@ -17,7 +18,7 @@ import io.realm.Realm;
  * Created by bym on 16/3/15.
  * TODO:destory时候的内存泄露检查
  */
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment {
+public abstract class BaseFragment<P extends IBasePresenter> extends Fragment {
 
     protected View rootView;
     protected Realm realm;

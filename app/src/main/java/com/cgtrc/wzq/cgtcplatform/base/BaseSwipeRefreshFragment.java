@@ -4,13 +4,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 
 import com.cgtrc.wzq.cgtcplatform.R;
+import com.cgtrc.wzq.cgtcplatform.inerf.IBasePresenter;
 
 import butterknife.Bind;
 
 /**
  * Created by bym on 16/3/15.
  */
-public abstract class BaseSwipeRefreshFragment<P extends BasePresenter>
+public abstract class BaseSwipeRefreshFragment<P extends IBasePresenter>
         extends BaseFragment<P> implements SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.swipe_refresh)
