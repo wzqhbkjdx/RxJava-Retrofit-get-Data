@@ -1,17 +1,16 @@
 package com.cgtrc.wzq.cgtcplatform.model;
 
-import java.io.Serializable;
+import com.cgtrc.wzq.cgtcplatform.inerf.INewsItem;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
 
 /**
  * Created by bym on 16/3/17.
  * news item in top banner
  */
-public class PicBanner extends RealmObject implements Serializable {  //保存到本地,还是用Serializable
+public class PicBanner implements Serializable,INewsItem {  //保存到本地,还是用Serializable
 
-    @PrimaryKey
+
     private String title;
     private String link;
     private String pubDate;

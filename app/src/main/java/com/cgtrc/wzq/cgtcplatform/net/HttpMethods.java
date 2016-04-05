@@ -4,6 +4,7 @@ import com.cgtrc.wzq.cgtcplatform.inerf.MoblieAPIData;
 import com.cgtrc.wzq.cgtcplatform.model.NewsData;
 import com.cgtrc.wzq.cgtcplatform.model.ProvidersData;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -46,7 +47,7 @@ public class HttpMethods {
      *
      * @param subscriber  由调用者传过来的观察者对象
      */
-    public void getNewsData (Subscriber<NewsData> subscriber, String url, int type) {
+    public void getNewsData (Subscriber<NewsData> subscriber, String url, int LorBType, Map<String,String> map) {
 
         retrofit = new Retrofit.Builder()
                 .client(builder.build())
@@ -55,14 +56,14 @@ public class HttpMethods {
                 .baseUrl(url)
                 .build();
         apiService = retrofit.create(MoblieAPIData.class);
-        if(type == API.TYPE_LATEST){
-            apiService.getLatestData()
+        if(LorBType == API.TYPE_LATEST){
+            apiService.getLatestData(map)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
-        } else if(type == API.TYPE_BEFORE) {
-            apiService.getBeforeData()
+        } else if(LorBType == API.TYPE_BEFORE) {
+            apiService.getBeforeData(map)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

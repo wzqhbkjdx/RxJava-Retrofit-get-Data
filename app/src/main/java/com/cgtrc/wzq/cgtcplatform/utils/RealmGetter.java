@@ -17,7 +17,7 @@ public class RealmGetter {
                 Realm.deleteRealm(realmConfiguration);
                 //Realm file has been deleted.
                 return Realm.getInstance(realmConfiguration);
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 throw ex;
                 //No Realm file to remove.
             }

@@ -48,7 +48,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
          * TODO:List数据为空的时候怎么处理,数据什么时候保存
          */
 //        newsItems = DB.findAll(NewsItem.class); //数据库如果没有存储数据,直接查找会导致错误
-        newsItems = getDefaultData(); //初始化数据
+        newsItems = new ArrayList<>(); //初始化数据
         /**
          * 初始化滤镜
          * TODO:移动到Banner
@@ -122,9 +122,9 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
 
-        if (hasFooter) {
-            return newsItems.size() + 1;
-        }
+//        if (hasFooter) {
+//            return newsItems.size() + 1;
+//        }
         return newsItems.size() ;
 
     }
@@ -181,19 +181,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     private List<NewsItem> getDefaultData() {
-        List<NewsItem> list = new ArrayList<>();
-        NewsItem item = new NewsItem();
-        item.setDescription("两机专项即将在年内成立");
-        item.setLink("www.baidu.com");
-        item.setTitle("两机专项");
-        item.setOriginal("网易新闻");
-        item.setPicLink("");
-        item.setPubDate("2016-03-23");
-        item.setType("行业动态");
-        for(int i = 0; i < 10; i++) {
-            list.add(item);
-        }
-        return list;
+       return null;
     }
 
 

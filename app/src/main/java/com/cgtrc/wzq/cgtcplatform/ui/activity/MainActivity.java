@@ -110,8 +110,8 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id ==  R.id.action_about){
-//            Intent intent = new Intent(this, AboutActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(this, TestActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

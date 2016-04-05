@@ -2,30 +2,20 @@ package com.cgtrc.wzq.cgtcplatform.model;
 
 import com.cgtrc.wzq.cgtcplatform.inerf.INewsData;
 
-import io.realm.RealmList;
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by bym on 16/3/24.
  */
-public class NewsData extends RealmObject implements INewsData {
-    @PrimaryKey
-    private String date;
+public class NewsData implements INewsData,Serializable {
+
+    private long date;
     private String error;
-    private String ErrorType;
     private String ErrorMessage;
 
-    private RealmList<NewsItem> newsItems;
-    private RealmList<PicBanner> banners;
 
-    public RealmList<PicBanner> getBanners() {
-        return banners;
-    }
-
-    public void setBanners(RealmList<PicBanner> banners) {
-        this.banners = banners;
-    }
+    private List<NewsItem> newsItems;
 
     public String getError() {
         return error;
@@ -35,13 +25,6 @@ public class NewsData extends RealmObject implements INewsData {
         this.error = error;
     }
 
-    public String getErrorType() {
-        return ErrorType;
-    }
-
-    public void setErrorType(String errorType) {
-        ErrorType = errorType;
-    }
 
     public String getErrorMessage() {
         return ErrorMessage;
@@ -51,19 +34,19 @@ public class NewsData extends RealmObject implements INewsData {
         ErrorMessage = errorMessage;
     }
 
-    public String getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
-    public RealmList<NewsItem> getNewsItems() {
+    public List<NewsItem> getNewsItems() {
         return newsItems;
     }
 
-    public void setNewsItems(RealmList<NewsItem> newsItems) {
+    public void setNewsItems(List<NewsItem> newsItems) {
         this.newsItems = newsItems;
     }
 }

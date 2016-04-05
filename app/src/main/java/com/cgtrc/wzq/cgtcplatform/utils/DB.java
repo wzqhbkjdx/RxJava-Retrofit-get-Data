@@ -1,5 +1,7 @@
 package com.cgtrc.wzq.cgtcplatform.utils;
 
+import com.cgtrc.wzq.cgtcplatform.App;
+
 import java.util.List;
 
 import io.realm.Realm;
@@ -12,7 +14,7 @@ import io.realm.Sort;
  */
 public class DB {
 
-    public static Realm realm = Realm.getDefaultInstance();
+    public static Realm realm = RealmGetter.getRealm(App.realmConfiguration);
 
     public static void saveOrUpdate(RealmObject realmObject) {
         realm.beginTransaction();
@@ -39,6 +41,12 @@ public class DB {
     public static <T extends RealmObject> RealmResults<T> findAll(Class<T> realmObjectClass) {
         return realm.where(realmObjectClass).findAll();
     }
+
+    public static <T extends RealmObject> RealmResults<T> findAllResults(Class<T> realmObjectClass) {
+        RealmResults<T> results = findAll(realmObjectClass);
+        return results;
+    }
+
 
     public static <T extends RealmObject> RealmResults<T> findAllDateSorted(Class<T> realmObjectClass) {
         RealmResults<T> results = findAll(realmObjectClass);

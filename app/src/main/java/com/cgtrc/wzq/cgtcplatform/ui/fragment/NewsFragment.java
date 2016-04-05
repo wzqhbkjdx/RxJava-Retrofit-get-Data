@@ -80,9 +80,6 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
 
     @Override
     protected void initData() {
-        /**
-         * TODO:初始化Banner
-         */
         initBanner();
         onRefresh();
     }
@@ -117,14 +114,12 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
 
     @Override
     protected void initPresenter() {
-//        mPresenter = new NewsDataPresenter(getActivity());z
+        mPresenter = new NewsDataPresenter(getActivity(),this);
     }
 
     @Override
     public void onRefresh() {
-        /**
-         * TODO:presenter.loadNews()
-         */
+       mPresenter.loadNews();
 
     }
 

@@ -1,19 +1,21 @@
 package com.cgtrc.wzq.cgtcplatform.model;
 
-import com.cgtrc.wzq.cgtcplatform.inerf.INewsItem;
-
 import java.io.Serializable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
- * Created by bym on 16/3/15.
- * 代表列表新闻和图片新闻
+ * Created by bym on 16/4/5.
  */
-public class NewsItem implements INewsItem,Serializable {
+public class RealmNewsItem extends RealmObject implements Serializable {
+
+    @PrimaryKey
+    private long pubDate;
 
     private String title;
     private String newsDetailLink;
     private String picLink;
-    private String pubDate;
     private String original;
     private String timeStamp;
     private String detailNo;
@@ -45,9 +47,7 @@ public class NewsItem implements INewsItem,Serializable {
         this.newsDetailLink = newsDetailLink;
     }
 
-    public void NewsItem() {
 
-    }
 
     public String getTimeStamp() {
         return timeStamp;
@@ -69,10 +69,10 @@ public class NewsItem implements INewsItem,Serializable {
     public void setPicLink(String picLink) {
         this.picLink = picLink;
     }
-    public String getPubDate() {
+    public long getPubDate() {
         return pubDate;
     }
-    public void setPubDate(String pubDate) {
+    public void setPubDate(long pubDate) {
         this.pubDate = pubDate;
     }
     public String getOriginal() {
@@ -81,4 +81,6 @@ public class NewsItem implements INewsItem,Serializable {
     public void setOriginal(String original) {
         this.original = original;
     }
+
+
 }

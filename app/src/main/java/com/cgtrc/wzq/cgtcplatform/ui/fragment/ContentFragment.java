@@ -64,16 +64,13 @@ public class ContentFragment extends BaseFragment {
     private void initFragments() {
         String[] newsTitles = new String[] {
                 getString(R.string.news),
-                getString(R.string.store),
-                getString(R.string.data),
-                getString(R.string.circle)
         };
         titles = Arrays.asList(newsTitles);
 
         fragments.add(new NewsFragment());//加入新文的fragment
-        fragments.add(new NewsFragment());//加入商城的fragment
-        fragments.add(new NewsFragment());//加入数据的fragment
-        fragments.add(new NewsFragment());//加入圈子的fragment
+//        fragments.add(new TestFragment());//加入商城的fragment
+//        fragments.add(new NewsFragment());//加入数据的fragment
+//        fragments.add(new NewsFragment());//加入圈子的fragment
 
         adapter.setFragments(fragments,titles);
     }
@@ -128,7 +125,7 @@ public class ContentFragment extends BaseFragment {
             this.titles = titles;
         }
 
-        public void addFragment(BaseSwipeRefreshFragment fragment, String title){
+        public void addFragment(BaseSwipeRefreshFragment fragment, String title) {
             fragments.add(fragment);
             titles.add(title);
         }

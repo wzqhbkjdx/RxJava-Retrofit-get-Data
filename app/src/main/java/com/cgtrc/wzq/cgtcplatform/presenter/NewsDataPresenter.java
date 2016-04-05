@@ -33,7 +33,7 @@ public class NewsDataPresenter implements INewsPresenter,OnLoadDataListener<News
 
     @Override
     public void loadBefore() {
-
+        mNewsModel.getNews(API.TYPE_BEFORE);
     }
 
     @Override
@@ -44,11 +44,13 @@ public class NewsDataPresenter implements INewsPresenter,OnLoadDataListener<News
     @Override
     public void onDataSuccess(NewsData news) {
         mNewsView.addNews(news);
+        mNewsView.hideProgress();
     }
 
     @Override
     public void onFailure(String msg) {
-
+        mNewsView.hideProgress();
+        mNewsView.loadFailed(msg);
     }
 
 
