@@ -1,5 +1,7 @@
 package com.cgtrc.wzq.cgtcplatform.model;
 
+import com.cgtrc.wzq.cgtcplatform.inerf.INewsItem;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -8,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * Created by bym on 16/4/5.
  */
-public class RealmNewsItem extends RealmObject implements Serializable {
+public class RealmNewsItem extends RealmObject implements Serializable,INewsItem {
 
     @PrimaryKey
     private long pubDate;

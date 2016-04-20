@@ -56,7 +56,7 @@ public class HttpMethods {
                 .baseUrl(url)
                 .build();
         apiService = retrofit.create(MoblieAPIData.class);
-        if(LorBType == API.TYPE_LATEST){
+        if(LorBType == API.TYPE_LATEST) {
             apiService.getLatestData(map)
                     .subscribeOn(Schedulers.io())
                     .unsubscribeOn(Schedulers.io())
@@ -71,7 +71,22 @@ public class HttpMethods {
         }
     }
 
-    public void getProvidersData(Subscriber<ProvidersData> subscriber){
+    public void getNewsDetail(Subscriber<Map<String,String>> subscriber,String url,String number) {
+        retrofit = new Retrofit.Builder()
+                .client(builder.build())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .baseUrl(url)
+                .build();
+        apiService = retrofit.create(MoblieAPIData.class);
+        apiService.getNewsDetail(number)
+                .subscribeOn(Schedulers.io())
+                .unsubscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+    }
+
+    public void getProvidersData(Subscriber<ProvidersData> subscriber) {
 
     }
 

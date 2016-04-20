@@ -1,10 +1,13 @@
 package com.cgtrc.wzq.cgtcplatform.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.cgtrc.wzq.cgtcplatform.App;
 
 /**
@@ -26,5 +29,19 @@ public class ImageUtil {
                 .animate(animationId)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(view);
+    }
+
+    public static void load(Context context, String url, final ImageView view,  boolean isComplete) {
+        Glide.with(context)
+                .load(url)
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>(view.getWidth(), view.getHeight()) {
+                    @Override
+                    public void onResourceReady(Bitmap bmp, GlideAnimation anim) {
+                        view.setImageBitmap(bmp);
+
+                    }
+                });
+
     }
 }

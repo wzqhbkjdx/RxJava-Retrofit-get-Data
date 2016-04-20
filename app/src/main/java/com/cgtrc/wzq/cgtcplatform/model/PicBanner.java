@@ -10,46 +10,87 @@ import java.io.Serializable;
  */
 public class PicBanner implements Serializable,INewsItem {  //保存到本地,还是用Serializable
 
+    private long pubDate;
 
     private String title;
-    private String link;
-    private String pubDate;
+    private String originalLink;
+    private String picLinks;
     private String description;
+    private String original;
+    private String timeStamp;
+    private String detailNo;
+    private int category;
+
+    public long getPubDate() {
+        return pubDate;
+    }
+
+    public void setPubDate(long pubDate) {
+        this.pubDate = pubDate;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public String getOriginalLink() {
+        return originalLink;
     }
 
-    public void setPubDate(String pubDate) {
-        this.pubDate = pubDate;
+    public void setOriginalLink(String originalLink) {
+        this.originalLink = originalLink;
+    }
+
+    public String getPicLinks() {
+        return picLinks;
+    }
+
+    public void setPicLinks(String picLinks) {
+        this.picLinks = picLinks;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-
-    public String getLink() {
-        return link;
+    public String getOriginal() {
+        return original;
     }
 
-
-    public String getTitle() {
-        return title;
+    public void setOriginal(String original) {
+        this.original = original;
     }
 
-
-    public String getPubDate() {
-        return pubDate;
+    public String getTimeStamp() {
+        return timeStamp;
     }
 
+    public void setTimeStamp(String timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 
-    public String getDescription() {
-        return description;
+    public String getDetailNo() {
+        return detailNo;
+    }
+
+    public void setDetailNo(String detailNo) {
+        this.detailNo = detailNo;
+    }
+
+    public int getCategory() {
+        return category;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
     }
 
 }

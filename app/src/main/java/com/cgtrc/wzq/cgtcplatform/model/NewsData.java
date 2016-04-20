@@ -3,6 +3,7 @@ package com.cgtrc.wzq.cgtcplatform.model;
 import com.cgtrc.wzq.cgtcplatform.inerf.INewsData;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,27 +12,33 @@ import java.util.List;
 public class NewsData implements INewsData,Serializable {
 
     private long date;
-    private String error;
-    private String ErrorMessage;
-
+    private int errorType;
 
     private List<NewsItem> newsItems;
+    private List<PicBanner> picBanners;
 
-    public String getError() {
-        return error;
+    public NewsData() {
+        this.newsItems = new ArrayList<NewsItem>();
+        this.picBanners = new ArrayList<PicBanner>();
+
     }
 
-    public void setError(String error) {
-        this.error = error;
+    public List<PicBanner> getPicBanners() {
+        return picBanners;
+    }
+
+    public void setPicBanners(List<PicBanner> picBanners) {
+        this.picBanners = picBanners;
     }
 
 
-    public String getErrorMessage() {
-        return ErrorMessage;
+
+    public int getErrorType() {
+        return errorType;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        ErrorMessage = errorMessage;
+    public void setErrorType(int errorType) {
+        this.errorType = errorType;
     }
 
     public long getDate() {

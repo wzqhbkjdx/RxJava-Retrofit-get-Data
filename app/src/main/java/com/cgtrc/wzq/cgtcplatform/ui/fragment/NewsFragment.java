@@ -1,6 +1,9 @@
 package com.cgtrc.wzq.cgtcplatform.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -11,29 +14,35 @@ import com.cgtrc.wzq.cgtcplatform.inerf.INewsView;
 import com.cgtrc.wzq.cgtcplatform.model.NewsData;
 import com.cgtrc.wzq.cgtcplatform.presenter.NewsDataPresenter;
 import com.cgtrc.wzq.cgtcplatform.ui.activity.MainActivity;
+import com.cgtrc.wzq.cgtcplatform.ui.activity.NewsDetailActivity;
+import com.cgtrc.wzq.cgtcplatform.utils.Constants;
 import com.cgtrc.wzq.cgtcplatform.utils.UiUtils;
+
+import butterknife.Bind;
 
 /**
  * Created by bym on 16/3/16.
- * TODO:添加网络请求的时候,在该view destory 或者用户点击back键后,应该取消该网络请求
+ *
  */
 public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> implements INewsView<NewsData> {
 
 
     private MainListAdapter adapter;
-//    private ConvenientBanner banner; //首行的图片轮转控件 先不加banner
     private LinearLayoutManager layoutManager;
 
+    @Bind(R.id.list)
+    protected RecyclerView recyclerView;
 
-
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
+    }
 
     @Override
     public void onDestroyView() {
-        /**
-         * TODO:在这里添加网络请求的cancel方法
-         */
-        mPresenter.cancelConnection();
+
+        mPresenter.cancelConnection(); //取消网络请求
         super.onDestroyView();
+
     }
 
     @Override
@@ -53,9 +62,22 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
 
             @Override
             public void onItemClick(RecyclerView.ViewHolder viewHolder) {
-                /**
-                 * TODO:item的点击事件,进入新闻详情页面
-                 */
+                //进入新闻详情页
+                if(viewHolder instanceof MainListAdapter.ViewHolder) {
+                    MainListAdapter.ViewHolder holder = (MainListAdapter.ViewHolder) viewHolder;
+                    Intent intent = new Intent(getActivity(), NewsDetailActivity.class);
+                    intent.putExtra(Constants.LINK, holder.newsItem.getNewsDetailLink());
+                    intent.putExtra(Constants.PICLINK,holder.newsItem.getPicLink());
+                    intent.putExtra(Constants.NUMBER,String.valueOf(holder.newsItem.getPubDate()));
+                    intent.putExtra(Constants.TITLE,holder.newsItem.getTitle());
+//                    startActivity(intent);
+                    ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
+                            holder.mImage, getString(R.string.shared_img));
+                    ActivityCompat.startActivity(getActivity(), intent, optionsCompat.toBundle());
+
+                    holder.mTitle.setTextColor(MainListAdapter.textGrey);
+                }
+
             }
         });
 
@@ -68,58 +90,87 @@ public class NewsFragment extends BaseSwipeRefreshFragment<NewsDataPresenter> im
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
                 if(newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItem + 1 == adapter.getItemCount()
-                        && adapter.isHasFooter()) {
-                    /**
-                     * TODO:newDataPresenter 加载历史数据
-                     */
+                        && lastVisibleItem + 1 == adapter.getItemCount()) {
+
+                    mPresenter.loadBefore();
                 }
             }
         });
     }
 
+    /**
+     * BaseFragment的方法,在
+     * BaseFragment中onCreatActivity调用
+     */
     @Override
     protected void initData() {
         initBanner();
         onRefresh();
     }
 
+
     private void initBanner() {
-        /**
-         * TODO:初始化Banner
-         */
+
     }
 
+    /**
+     * INewsView接口的方法,在presenter中调用
+     */
     @Override
     public void showProgress() {
         changeProgress(true);
     }
 
+    /**
+     * INewsView接口的方法,在presenter中调用
+     * @param news
+     */
     @Override
     public void addNews(NewsData news) {
         adapter.addNews(news);
     }
 
+    /**
+     * INewsView接口的方法,在presenter中调用
+     */
     @Override
     public void hideProgress() {
         changeProgress(false);
     }
 
+    /**
+     * INewsView接口的方法,在presenter中调用
+     * @param msg
+     */
     @Override
     public void loadFailed(String msg) {
         if (isLive()) {
-            UiUtils.showSnack(((MainActivity) getActivity()).getDrawerLayout(), R.string.load_fail);
+//            UiUtils.showSnack(((MainActivity) getActivity()).getDrawerLayout(), R.string.load_fail);
+            UiUtils.showSnackByTag(((MainActivity) getActivity()).getDrawerLayout(),msg);
         }
     }
 
+    /**
+     * BaseFragment中的方法,在BaseFragment中的onCreateView中调用
+     */
     @Override
     protected void initPresenter() {
         mPresenter = new NewsDataPresenter(getActivity(),this);
     }
 
+    /**
+     * 实现BaseSwipeRefreshFragment的onRefresh方法
+     * 同时在BaseFragment中的onCreateActivity中调用
+     */
     @Override
     public void onRefresh() {
-       mPresenter.loadNews();
+        if(checkNetworkState()) { //检查网络连接
+            mPresenter.loadNews();
+        } else {
+            loadFailed("没有网络连接,请稍后再试!");
+            hideProgress();
+        }
+
 
     }
 

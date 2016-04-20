@@ -7,6 +7,8 @@
     android:paddingRight="12dp"
     android:layout_height="90dp">
 
+        <!--android:src="@drawable/ic_menu_gallery" -->
+
         <ImageView
             android:id="@+id/news_img"
             android:layout_width="70dp"
@@ -15,7 +17,8 @@
             android:layout_centerInParent="true"
             android:scaleType="fitCenter"
             android:transitionName="@string/shared_img"
-            android:src="@drawable/ic_menu_gallery" />
+            android:src="@drawable/iv_background"
+            />
 
         <TextView
             android:id="@+id/news_title"
@@ -28,7 +31,7 @@
             android:lineSpacingMultiplier="1.2"
             android:paddingLeft="10dp"
             android:textColor="@color/cardview_dark_background"
-            android:text="航空发动机与燃气轮机重大专项"
+            android:text="this is the title of the news"
             android:textSize="16sp"
             tools:ignore="RtlSymmetry"/>
 

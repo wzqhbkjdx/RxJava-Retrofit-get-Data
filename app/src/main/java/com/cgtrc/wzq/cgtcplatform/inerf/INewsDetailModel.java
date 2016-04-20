@@ -3,8 +3,9 @@ package com.cgtrc.wzq.cgtcplatform.inerf;
 /**
  * Created by bym on 16/3/24.
  */
-public interface INewsDetailModel<T extends INewsItem, D extends INewsDetail> {
+public interface INewsDetailModel {
     void cancel();
-    void getNewsDetail(T newsItem);
+    void getNewsDetail();
+
 
 }

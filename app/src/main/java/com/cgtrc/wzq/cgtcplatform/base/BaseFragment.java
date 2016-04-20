@@ -1,5 +1,7 @@
 package com.cgtrc.wzq.cgtcplatform.base;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,12 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cgtrc.wzq.cgtcplatform.App;
 import com.cgtrc.wzq.cgtcplatform.inerf.IBasePresenter;
-import com.cgtrc.wzq.cgtcplatform.utils.RealmGetter;
 
 import butterknife.ButterKnife;
-import io.realm.Realm;
 
 /**
  * Created by bym on 16/3/15.
@@ -21,7 +20,7 @@ import io.realm.Realm;
 public abstract class BaseFragment<P extends IBasePresenter> extends Fragment {
 
     protected View rootView;
-    protected Realm realm;
+//    protected Realm realm;
     protected P mPresenter;
     protected int layoutId;
 
@@ -49,7 +48,7 @@ public abstract class BaseFragment<P extends IBasePresenter> extends Fragment {
 
     protected void checkPresenterIsNull() {
         if(mPresenter == null) {
-            throw new IllegalStateException("please init mPresenter in initPresenter() method ");
+//            throw new IllegalStateException("please init mPresenter in initPresenter() method ");
         }
     }
 
@@ -61,7 +60,7 @@ public abstract class BaseFragment<P extends IBasePresenter> extends Fragment {
     public void onStart() {
         super.onStart();
 //        realm = Realm.getDefaultInstance();//得到Realm数据库实例
-        realm = RealmGetter.getRealm(App.realmConfiguration);
+//        realm = RealmGetter.getRealm(App.realmConfiguration);
 
     }
 
@@ -81,12 +80,27 @@ public abstract class BaseFragment<P extends IBasePresenter> extends Fragment {
     public void onDestroy() {
         super.onDestroy();
 //        App.getWatcher(getActivity()).watch(this); //Application实例产生一个RefWatcher进行内存泄漏监测
-        realm.close();
+//        realm.close();
     }
 
     public boolean isLive() {
-        return getActivity() != null && getActivity().isDestroyed();
+        return getActivity() != null && ! getActivity().isDestroyed();
     }
+
+    /**
+     * 检查网络连接
+     * @return
+     */
+    public boolean checkNetworkState () {
+        boolean flag = false;
+        ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //去进行判断网络是否连接
+        if (manager.getActiveNetworkInfo() != null) {
+            flag = manager.getActiveNetworkInfo().isAvailable();
+        }
+        return flag;
+    }
+
 }
 
 

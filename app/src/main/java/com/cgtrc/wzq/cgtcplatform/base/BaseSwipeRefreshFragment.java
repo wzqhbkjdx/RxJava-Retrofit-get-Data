@@ -1,7 +1,6 @@
 package com.cgtrc.wzq.cgtcplatform.base;
 
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 
 import com.cgtrc.wzq.cgtcplatform.R;
 import com.cgtrc.wzq.cgtcplatform.inerf.IBasePresenter;
@@ -16,12 +15,8 @@ public abstract class BaseSwipeRefreshFragment<P extends IBasePresenter>
 
     @Bind(R.id.swipe_refresh)
     protected SwipeRefreshLayout swipeRefreshLayout;
-    @Bind(R.id.list)
-    protected RecyclerView recyclerView;
 
-    public RecyclerView getRecyclerView() {
-        return recyclerView;
-    }
+
 
     @Override
     protected void initViews() {

@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#FF6363</color>
-    <color name="colorPrimaryDark">#DC1915</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#DC1915</color>
 
     <color name="cardview_dark_background">#FF202020</color>
     <color name="lighter_gray">#ddd</color>
     <color name="darker_gray">#aaa</color>
+
+    <color name="halfer_transparent">#66000000</color>
+    <color name="translucent">#e0000000</color>
+    <color name="color_8290AF">#8290AF</color>
+    <color name="color_aeaeae">#aeaeae</color>
+    <color name="color_232323">#232323</color>
+    <color name="im_font_color_text_hint">#abb1b6</color>
+    <color name="im_social_dig_name_bg">#DDDDDD</color>
+    <color name="im_line_color">#dadada</color>
+    <color name="transparent">#00000000</color>
+    <color name="name_selector_color">#cccccc</color>
+    <color name="text_primary">#000000</color>
+
 </resources>

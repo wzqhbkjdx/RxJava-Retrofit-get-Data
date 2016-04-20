@@ -3,6 +3,7 @@ package com.cgtrc.wzq.cgtcplatform.utils;
 import com.cgtrc.wzq.cgtcplatform.model.NewsData;
 import com.cgtrc.wzq.cgtcplatform.model.RealmNewsData;
 import com.cgtrc.wzq.cgtcplatform.model.RealmNewsItem;
+import com.cgtrc.wzq.cgtcplatform.model.RealmPicBanner;
 import com.cgtrc.wzq.cgtcplatform.model.RealmString;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -71,6 +72,10 @@ public class Json {
 
     public static RealmNewsData parseRealmNewsData(String data) {
         return mGson.fromJson(data, RealmNewsData.class);
+    }
+
+    public static RealmPicBanner parseRealmPicBanner(String data) {
+        return mGson.fromJson(data, RealmPicBanner.class);
     }
 
 }

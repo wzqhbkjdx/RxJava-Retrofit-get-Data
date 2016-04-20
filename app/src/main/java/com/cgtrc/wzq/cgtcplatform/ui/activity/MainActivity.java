@@ -5,6 +5,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -56,6 +57,18 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+//        ContentFragment contentFragment = (ContentFragment) getSupportFragmentManager().findFragmentByTag("Home");
+//        Fragment fragment = contentFragment.getFragmentFromViewPager();
+//        if(fragment instanceof CircleFragment) {
+//            ((CircleFragment) fragment).onKeyDown(keyCode,event);
+//        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     /**
@@ -110,7 +123,7 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(id ==  R.id.action_about){
-            Intent intent = new Intent(this, TestActivity.class);
+            Intent intent = new Intent(this, NewsDetailActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

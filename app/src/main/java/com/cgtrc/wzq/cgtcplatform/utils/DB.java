@@ -38,6 +38,10 @@ public class DB {
         return realm.where(realmObjectClass).equalTo("id", id).findFirst();
     }
 
+    public static <T extends RealmObject> T getByLink(String link, Class<T> realmObjectClass) {
+        return realm.where(realmObjectClass).equalTo("newsDetailLink",link).findFirst();
+    }
+
     public static <T extends RealmObject> RealmResults<T> findAll(Class<T> realmObjectClass) {
         return realm.where(realmObjectClass).findAll();
     }
@@ -48,9 +52,9 @@ public class DB {
     }
 
 
-    public static <T extends RealmObject> RealmResults<T> findAllDateSorted(Class<T> realmObjectClass) {
+    public static <T extends RealmObject> RealmResults<T> findAllDateSorted(String tag,Class<T> realmObjectClass) {
         RealmResults<T> results = findAll(realmObjectClass);
-        results.sort(Constants.DATE, Sort.DESCENDING);
+        results.sort(tag, Sort.DESCENDING);
         return results;
     }
 

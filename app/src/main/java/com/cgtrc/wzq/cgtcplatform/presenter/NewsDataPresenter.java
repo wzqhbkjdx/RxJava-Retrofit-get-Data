@@ -51,6 +51,7 @@ public class NewsDataPresenter implements INewsPresenter,OnLoadDataListener<News
     public void onFailure(String msg) {
         mNewsView.hideProgress();
         mNewsView.loadFailed(msg);
+
     }
 
 

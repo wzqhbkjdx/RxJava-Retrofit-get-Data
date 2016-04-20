@@ -12,12 +12,16 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.convenientbanner.ConvenientBanner;
+import com.bigkoo.convenientbanner.holder.CBViewHolderCreator;
 import com.cgtrc.wzq.cgtcplatform.R;
 import com.cgtrc.wzq.cgtcplatform.model.NewsData;
-import com.cgtrc.wzq.cgtcplatform.model.NewsItem;
+import com.cgtrc.wzq.cgtcplatform.model.RealmNewsItem;
+import com.cgtrc.wzq.cgtcplatform.model.RealmPicBanner;
+import com.cgtrc.wzq.cgtcplatform.ui.view.NetworkImageHolderView;
+import com.cgtrc.wzq.cgtcplatform.utils.DB;
 import com.cgtrc.wzq.cgtcplatform.utils.ImageUtil;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,29 +30,28 @@ import java.util.List;
 public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int TYPE_ITEM = 1;
-    /**
-     * footer是"加载更多"的提示
-     */
-    private static final int TYPE_FOOTER = 2;
+
+    private static final int TYPE_BANNER = 3;
 
     private final Context context;
     private static IClickMainItemListener mIClickMainItemListener;
     private static ColorFilter mColorFilter;//图片的色彩滤镜
-    private boolean hasFooter;
+
     public static int textGrey;
     public static int textDark;
 
-    private List<NewsItem> newsItems;
+    private List<RealmNewsItem> newsItems;
+    private List<RealmPicBanner> banners;
     private NewsData newsData;
+
 
     public MainListAdapter(Context context) {
         this.context = context;
 
-        /**
-         * TODO:List数据为空的时候怎么处理,数据什么时候保存
-         */
-//        newsItems = DB.findAll(NewsItem.class); //数据库如果没有存储数据,直接查找会导致错误
-        newsItems = new ArrayList<>(); //初始化数据
+        newsItems = DB.findAllDateSorted("pubDate",RealmNewsItem.class); //初始化数据
+        banners = DB.findAllDateSorted("pubDate",RealmPicBanner.class);
+//        newsItems = DB.findAll(RealmNewsItem.class);
+
         /**
          * 初始化滤镜
          * TODO:移动到Banner
@@ -66,21 +69,9 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.mIClickMainItemListener = iClickMainItemListener;
     }
 
-    public boolean isHasFooter() {
-        return hasFooter;
-    }
-
-    public void setHasFooter(boolean hasFooter) {
-        this.hasFooter = hasFooter;
-        notifyDataSetChanged();
-    }
 
     public void addNews(NewsData newsData) {
         this.newsData = newsData;
-        newsItems = newsData.getNewsItems();
-        if(newsItems.size() != 0) {
-            setHasFooter(true);
-        }
         notifyDataSetChanged();
     }
 
@@ -88,9 +79,9 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 
-      if(viewType == TYPE_FOOTER) {
-            View view = layoutInflater.inflate(R.layout.footer_loading, parent, false);
-            return new FooterViewHolder(view);
+      if(viewType == TYPE_BANNER) {
+          View view = layoutInflater.inflate(R.layout.fragment_news_banner, parent, false);
+          return new BannerViewHolder(view);
         } else {
             View view = layoutInflater.inflate(R.layout.fragment_news_item, parent, false);
             return new ViewHolder(view);
@@ -105,43 +96,63 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         if(holder instanceof ViewHolder) {
             final ViewHolder viewHolder = (ViewHolder)holder;
-            viewHolder.newsItem = newsItems.get(position);
+            viewHolder.newsItem = newsItems.get(position - 1);
 
             viewHolder.mTitle.setText(viewHolder.newsItem.getTitle());
-            viewHolder.mPubDate.setText(viewHolder.newsItem.getPubDate());
+            viewHolder.mPubDate.setText(String.valueOf(viewHolder.newsItem.getPubDate()));
             viewHolder.mOriginal.setText(viewHolder.newsItem.getOriginal());
 
             if(viewHolder.newsItem.getPicLink() != null) {
-                //用gilde开源库异步加载图片
-                ImageUtil.load(context,viewHolder.newsItem.getPicLink(),viewHolder.mImage);
+                if(viewHolder.newsItem.getPicLink().startsWith("http://")) {
+                    ImageUtil.load(context,viewHolder.newsItem.getPicLink(),viewHolder.mImage);
+                    viewHolder.mImage.setVisibility(View.VISIBLE);
+                }
+            } else {
+                viewHolder.mImage.setVisibility(View.GONE);
             }
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mIClickMainItemListener.onItemClick(viewHolder);
+                }
+            });
+        } else if(holder instanceof BannerViewHolder) {
+            final BannerViewHolder itemHolder = (BannerViewHolder) holder;
+            itemHolder.banner.setPages(new CBViewHolderCreator<NetworkImageHolderView>() {
+                @Override
+                public NetworkImageHolderView createHolder() {
+                    return new NetworkImageHolderView();
+                }
+            }, banners);
         }
-        return;
+
     }
 
     @Override
     public int getItemCount() {
 
-//        if (hasFooter) {
-//            return newsItems.size() + 1;
-//        }
-        return newsItems.size() ;
+        return newsItems.size() + 1; //有个Banner
 
     }
 
     @Override
     public int getItemViewType(int position) {
 
-        if(hasFooter && position == newsItems.size() + 1) {
-            return TYPE_FOOTER;
+        if(position == 0) {
+            return TYPE_BANNER;
         }
+
         return TYPE_ITEM;
     }
 
-    public class FooterViewHolder extends RecyclerView.ViewHolder {
 
-        public FooterViewHolder(View itemView) {
-            super(itemView);
+
+    public class BannerViewHolder extends RecyclerView.ViewHolder {
+        public final ConvenientBanner<RealmPicBanner> banner;
+
+        public BannerViewHolder(View view) {
+            super(view);
+            banner = (ConvenientBanner) view.findViewById(R.id.convenientBanner);
         }
     }
 
@@ -152,11 +163,11 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public final TextView mPubDate;
         public final TextView mOriginal;
         public final View mItem;
-        public NewsItem newsItem;
+        public RealmNewsItem newsItem;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            newsItem = new NewsItem();
+            newsItem = new RealmNewsItem();
             mImage = (ImageView) itemView.findViewById(R.id.news_img);
             mTitle = (TextView) itemView.findViewById(R.id.news_title);
             mPubDate = (TextView) itemView.findViewById(R.id.news_pubDate);
@@ -172,7 +183,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     /**
      * adapter对外开放的接口,设置item的点击事件
-     * 后续再补充完善
+     *
      */
     public interface IClickMainItemListener {
 
@@ -180,9 +191,7 @@ public class MainListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     }
 
-    private List<NewsItem> getDefaultData() {
-       return null;
-    }
+
 
 
 }

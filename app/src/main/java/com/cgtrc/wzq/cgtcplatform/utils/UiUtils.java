@@ -20,4 +20,8 @@ public class UiUtils {
     public static void showSnackLong(View rootView, int textId) {
         Snackbar.make(rootView, context.getString(textId), Snackbar.LENGTH_LONG).show();
     }
+
+    public static void showSnackByTag(View rootView,String tag) {
+        Snackbar.make(rootView, tag, Snackbar.LENGTH_SHORT).show();
+    }
 }

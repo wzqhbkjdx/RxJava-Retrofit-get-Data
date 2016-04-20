@@ -41,6 +41,10 @@ public class ContentFragment extends BaseFragment {
         viewPager.setAdapter(adapter);
         tabs.setTabMode(TabLayout.MODE_FIXED);
         tabs.setupWithViewPager(viewPager);
+
+        /**
+         * TODO:这里改为单击状态栏回到顶部
+         */
         tabs.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -54,23 +58,29 @@ public class ContentFragment extends BaseFragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                scrollToTop(fragments.get(tab.getPosition()).getRecyclerView());
+//                scrollToTop(fragments.get(tab.getPosition()).getRecyclerView());
             }
         });
+
+
     }
 
+    public Fragment getFragmentFromViewPager() {
+       return  adapter.getItem(viewPager.getCurrentItem());
+    }
 
 
     private void initFragments() {
         String[] newsTitles = new String[] {
                 getString(R.string.news),
+                "圈子"
         };
         titles = Arrays.asList(newsTitles);
 
         fragments.add(new NewsFragment());//加入新文的fragment
 //        fragments.add(new TestFragment());//加入商城的fragment
 //        fragments.add(new NewsFragment());//加入数据的fragment
-//        fragments.add(new NewsFragment());//加入圈子的fragment
+        fragments.add(new CircleFragment());//加入圈子的fragment
 
         adapter.setFragments(fragments,titles);
     }

@@ -19,7 +19,7 @@ public interface MoblieAPIData {
     Observable<NewsData> getLatestData(@QueryMap Map<String, String> options);
 
 
-    @GET("/JsonRss/GetItem") //后续服务器实现该功能后再添加
+    @GET("/JsonRss/GetItemBefore") //后续服务器实现该功能后再添加
     Observable<NewsData> getBeforeData(@QueryMap Map<String, String> options);
 
     @GET("/JsonRss/GetNewsDetail")
